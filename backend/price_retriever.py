@@ -15,6 +15,7 @@ def fetch_history(symbol: str) -> pd.DataFrame:
     if df is None or df.empty:
         raise ValueError(f"No data for {symbol}")
    
+    df = df.reset_index()
     df1 = pd.DataFrame()
     df1["Price"] = (df["High"]+df["Low"])/2
     df1["Date"] = pd.to_datetime(df["Date"])

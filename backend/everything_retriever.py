@@ -13,7 +13,8 @@ def parse_args():
 def main():
     args = parse_args()
     bucket = args.bucket
-    symbols = json.load(open("backend/us_listed_symbols.json"))
+    #symbols = json.load(open("backend/us_listed_symbols.json"))
+    symbols = ["AAPL", "MSFT", "GOOGL", "AMZN", "TSLA"]  # Example symbols, replace with your list
     with ThreadPoolExecutor(max_workers=5) as pool:
         futures = {pool.submit(retrieve, sym, bucket): sym for sym in symbols}
         for f in as_completed(futures):
