@@ -4,7 +4,7 @@
 import io
 import pandas as pd
 import yfinance as yf
-import boto3
+from s3_manager import upload
 
 def fetch_history(symbol: str) -> pd.DataFrame:
     """
@@ -31,21 +31,14 @@ def dataframe_to_parquet_bytes(df: pd.DataFrame) -> bytes:
     out.to_parquet(buf, engine="pyarrow", index=False)
     return buf.getvalue()
 
-def upload_parquet_to_s3(parquet_bytes: bytes, bucket: str, key: str):
+def upload_parquet_to_s3(parquet_bytes: bytes, key: str):
     """
     Upload Parquet bytes to S3.
     """
-    s3 = boto3.client("s3")  # uses EC2 role if running on EC2
-    s3.put_object(
-        Bucket=bucket,
-        Key=key,
-        Body=parquet_bytes,
-        ContentType="application/octet-stream",
-    )
-    print(f"Uploaded s3://{bucket}/{key}")
+    upload(key, parquet_bytes)
 
-def retrieve(symbol: str, bucket: str):
-    key = f"raw/symbol={symbol}/data.parquet"
+def retrieve(symbol: str):
+    key = f"raw/{symbol}/data.parquet"
     df = fetch_history(symbol)
     parquet_bytes = dataframe_to_parquet_bytes(df)
-    upload_parquet_to_s3(parquet_bytes, bucket, key)
+    upload_parquet_to_s3(parquet_bytes, key)
