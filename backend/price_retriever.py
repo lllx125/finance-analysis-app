@@ -19,7 +19,6 @@ def fetch_history(symbol: str) -> pd.DataFrame:
     df1 = pd.DataFrame()
     df1["Price"] = (df["High"]+df["Low"])/2
     df1["Date"] = pd.to_datetime(df["Date"])
-    df1["Symbol"] = symbol
     return df1
 
 def dataframe_to_parquet_bytes(df: pd.DataFrame) -> bytes:

@@ -11,10 +11,6 @@ type RowsResp = {
   }[];
 };
 
-const API = process.env.NEXT_PUBLIC_API_BASE || '/api';
-// In production via CloudFront, '/api' is routed to EC2.
-// For local dev, create .env.local with NEXT_PUBLIC_API_BASE=http://YOUR_EC2_PUBLIC_DNS/api
-
 export default function DataPage() {
   const [symbol, setSymbol] = useState('AAPL');
   const [loading, setLoading] = useState(false);
@@ -26,6 +22,7 @@ export default function DataPage() {
     setRows([]);
     setLoading(true);
     try {
+      const API = process.env.NEXT_PUBLIC_API_BASE || '/api';
       const r = await fetch(`${API}/data?symbol=${encodeURIComponent(symbol)}`);
       if (!r.ok) {
         const j = await r.json().catch(() => ({}));
