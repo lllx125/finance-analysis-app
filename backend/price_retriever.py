@@ -4,7 +4,7 @@
 import io
 import pandas as pd
 import yfinance as yf
-from s3_manager import upload
+from s3_manager import s3
 
 def fetch_history(symbol: str) -> pd.DataFrame:
     """
@@ -35,7 +35,7 @@ def upload_parquet_to_s3(parquet_bytes: bytes, key: str):
     """
     Upload Parquet bytes to S3.
     """
-    upload(key, parquet_bytes)
+    s3.upload(key, parquet_bytes)
 
 def retrieve(symbol: str):
     key = f"raw/{symbol}/data.parquet"
