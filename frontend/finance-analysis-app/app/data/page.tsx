@@ -1,11 +1,12 @@
 'use client';
 
+import { Console } from 'console';
 import { useState } from 'react';
 
-type RowsResp = {
+type Data = {
   symbol: string;
   count: number;
-  rows: {
+  data: {
     Date?: string;
     Price?: number | null;
   }[];
@@ -15,21 +16,25 @@ export default function DataPage() {
   const [symbol, setSymbol] = useState('AAPL');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
-  const [rows, setRows] = useState<RowsResp['rows']>([]);
+  const [data, setdata] = useState<Data['data']>([]);
 
   async function load() {
     setError('');
-    setRows([]);
+    setdata([]);
     setLoading(true);
     try {
-      const API = process.env.NEXT_PUBLIC_API_BASE || '/api';
+      //const API = process.env.NEXT_PUBLIC_API_BASE 
+      const API = '/api';
+
       const r = await fetch(`${API}/data?symbol=${encodeURIComponent(symbol)}`);
       if (!r.ok) {
         const j = await r.json().catch(() => ({}));
         throw new Error(j?.detail || `Failed: ${r.status}`);
       }
-      const j: RowsResp = await r.json();
-      setRows(j.rows || []);
+      const j: Data = await r.json();
+
+      setdata(j.data || []);
+            console.log('Loaded data:', j.data);
     } catch (e: any) {
       setError(e?.message || 'Failed to load data');
     } finally {
@@ -66,25 +71,25 @@ export default function DataPage() {
         </div>
       )}
 
-      {!error && rows.length > 0 && (
+      {!error && data.length > 0 && (
         <>
           <div className="mb-2">
-            Showing {rows.length.toLocaleString()} rows for <strong>{symbol}</strong>
+            Showing {data.length.toLocaleString()} data for <strong>{symbol}</strong>
           </div>
 
           <div className="overflow-auto max-h-96 border border-gray-200 rounded">
             <table className="table-auto w-full text-sm">
               <thead className="sticky top-0 bg-gray-100">
                 <tr>
-                  <th className="text-left px-3 py-2 border-b border-gray-300">Date</th>
-                  <th className="text-left px-3 py-2 border-b border-gray-300">Price</th>
+                  <th className="text-left px-3 py-2 border-b border-gray-300 text-black">Date</th>
+                  <th className="text-left px-3 py-2 border-b border-gray-300 text-black">Price</th>
                 </tr>
               </thead>
               <tbody>
-                {rows.map((r, i) => (
+                {data.map((r, i) => (
                   <tr key={i} className="odd:bg-white even:bg-gray-50">
-                    <td className="px-3 py-2 border-b border-gray-200 whitespace-nowrap">{r.Date ?? ''}</td>
-                    <td className="px-3 py-2 border-b border-gray-200 whitespace-nowrap">{r.Price ?? ''}</td>
+                    <td className="px-3 py-2 border-b border-gray-200 whitespace-nowrap text-black">{r.Date ?? ''}</td>
+                    <td className="px-3 py-2 border-b border-gray-200 whitespace-nowrap text-black">{r.Price ?? ''}</td>
                   </tr>
                 ))}
               </tbody>
@@ -93,7 +98,7 @@ export default function DataPage() {
         </>
       )}
 
-      {!error && !loading && rows.length === 0 && (
+      {!error && !loading && data.length === 0 && (
         <p className="text-gray-600">No data loaded yet. Enter a symbol and press Load.</p>
       )}
     </main>
