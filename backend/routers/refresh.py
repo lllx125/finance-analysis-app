@@ -19,7 +19,7 @@ async def refresh_unloaded_stocks():
     """Retrieve 50 unloaded stock symbols from us_listed_symbols.json"""
     
     # Load all available symbols
-    with open('../us_listed_symbols.json', 'r') as f:
+    with open('backend/us_listed_symbols.json', 'r') as f:
         all_symbols = json.load(f)
     
     # Get currently loaded symbols

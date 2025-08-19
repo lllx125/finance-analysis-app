@@ -24,7 +24,7 @@ def save_favorites_list(favorites):
 def list_favorites():
     """List all elements in favorite.json"""
     favorites = get_favorites_list()
-    return {"favorites": favorites, "length": len(favorites)}
+    return {"favorites": favorites, "count": len(favorites)}
 
 @router.post("/add")
 def add_favorite(symbol: str):
