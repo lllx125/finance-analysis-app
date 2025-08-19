@@ -3,7 +3,7 @@
 from fastapi import APIRouter
 import pandas as pd
 import io
-from ..s3_manager import s3
+from backend.s3_manager import s3
 
 router = APIRouter(prefix="/storage", tags=["storage"])
 

@@ -1,6 +1,6 @@
 # this file retrieves all the data from all symbols
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from price_retriever import retrieve
+from backend.price_retriever import retrieve
 import json
 
 

@@ -1,7 +1,7 @@
 # sets api structure
 
 from fastapi import FastAPI
-from .routers import health, storage, favorite, refresh
+from backend.routers import health, storage, favorite, refresh
 from fastapi.middleware.cors import CORSMiddleware
 
 # setup fast api object

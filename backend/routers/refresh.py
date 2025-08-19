@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 import json
 import random
-from ..price_retriever import retrieve_with_retry
-from ..routers.storage import list_files
-from ..routers.favorite import get_favorites_list
+from backend.price_retriever import retrieve_with_retry
+from backend.routers.storage import list_files
+from backend.routers.favorite import get_favorites_list
 
 router = APIRouter(prefix="/refresh", tags=["refresh"])
 

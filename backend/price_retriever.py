@@ -6,7 +6,7 @@ import asyncio
 from typing import List, Dict
 import pandas as pd
 import yfinance as yf
-from s3_manager import s3
+from backend.s3_manager import s3
 from typing import Any, Dict, List
 
 def fetch_history(symbol: str) -> pd.DataFrame:

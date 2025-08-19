@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 import json
-from ..s3_manager import s3
-from ..price_retriever import retrieve
+from backend.s3_manager import s3
+from backend.price_retriever import retrieve
 
 router = APIRouter(prefix="/favorite", tags=["favorite"])
 
