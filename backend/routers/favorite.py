@@ -5,7 +5,7 @@ from backend.price_retriever import retrieve
 
 router = APIRouter(prefix="/favorite", tags=["favorite"])
 
-FAVORITES_KEY = "symbols/favorite.json"
+FAVORITES_KEY = "my/favorite.json"
 
 def get_favorites_list():
     """Helper function to get current favorites from S3"""

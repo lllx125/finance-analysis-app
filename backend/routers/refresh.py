@@ -1,11 +1,13 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 import json
 import random
 from backend.price_retriever import retrieve_with_retry
 from backend.routers.storage import list_files
 from backend.routers.favorite import get_favorites_list
+from backend.auth import verify_api_key
 
-router = APIRouter(prefix="/refresh", tags=["refresh"])
+
+router = APIRouter(prefix="/refresh", tags=["refresh"], dependencies=[Depends(verify_api_key)])
 
 @router.post("")
 async def refresh_all_favorites():
