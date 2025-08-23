@@ -55,7 +55,7 @@ def add_favorite(symbol: str):
     
     return {"message": f"{symbol} added to favorites", "favorites": favorites}
 
-@router.delete("/delete")
+@router.post("/delete")
 def delete_favorite(symbol: str):
     """Delete a symbol from favorites list"""
     symbol = symbol.upper()

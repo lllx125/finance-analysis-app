@@ -1,7 +1,8 @@
 "use client";
 
-import { Console } from "console";
 import { useEffect, useState } from "react";
+import Typeahead from "../(components)/type-ahead";
+import { useAPI } from "../(components)/api-context";
 
 type Data = {
     symbol: string;
@@ -13,6 +14,8 @@ type Data = {
 };
 
 export default function DataPage() {
+    const API = useAPI();
+
     const [symbol, setSymbol] = useState("AAPL");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>("");
@@ -22,7 +25,6 @@ export default function DataPage() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const API = process.env.NEXT_PUBLIC_API_BASE;
                 const r = await fetch(`${API}/storage/list`);
                 const result = await r.json();
                 setDataList(result.files || []);
@@ -40,9 +42,6 @@ export default function DataPage() {
         setdata([]);
         setLoading(true);
         try {
-            const API = process.env.NEXT_PUBLIC_API_BASE;
-            //const API = '/api';
-
             const r = await fetch(
                 `${API}/storage/data?symbol=${encodeURIComponent(symbol)}`
             );
@@ -70,21 +69,15 @@ export default function DataPage() {
                 <div className="flex gap-2 items-center mb-3">
                     <label className="flex items-center">
                         <span className="mr-2">Symbol:</span>
-                        <select
-                            value={symbol}
-                            onChange={(e) => setSymbol(e.target.value)}
-                            className="border border-gray-300 rounded px-2 py-1"
-                        >
-                            {dataList.map((item) => (
-                                <option
-                                    key={item}
-                                    value={item}
-                                    className="dark:bg-gray-800"
-                                >
-                                    {item}
-                                </option>
-                            ))}
-                        </select>
+                        <Typeahead
+                            options={dataList}
+                            onSelect={(opt) => {
+                                setSymbol(opt.value);
+                                console.log("Selected:", opt);
+                            }}
+                            placeholder="Type to search symbols…"
+                            maxVisible={50} // or a smaller number if you want to limit count
+                        />
                     </label>
                     <button
                         onClick={load}
