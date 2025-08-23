@@ -9,7 +9,7 @@ router = APIRouter(prefix="/storage", tags=["storage"])
 
 def list_files():
     files = s3.list("raw/")
-    files = [file[4:-12] for file in files]
+    files = [file[4:-13] for file in files]
     return {"files": files, "count": len(files)}
 
 @router.get("/list")
