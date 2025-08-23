@@ -76,7 +76,6 @@ export default function DataPage() {
                                 console.log("Selected:", opt);
                             }}
                             placeholder="Type to search symbols…"
-                            maxVisible={50} // or a smaller number if you want to limit count
                         />
                     </label>
                     <button

@@ -36,7 +36,7 @@ def add_favorite(symbol: str):
     
     # Check if already in favorites
     if symbol in favorites:
-        return {"message": f"{symbol} already in favorites", "favorites": favorites}
+        raise HTTPException(status_code=404, detail=f"{symbol} already in favorites")
     
     # Check if symbol data exists in S3
     try:

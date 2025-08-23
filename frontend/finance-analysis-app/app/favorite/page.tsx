@@ -84,7 +84,7 @@ export default function FavoritePage() {
                 {favoriteList.map((item) => (
                     <Item key={item} symbol={item} onDelete={handleDelete} />
                 ))}
-                <div className="flex items-center gap-2 py-5">
+                <div className="flex items-center gap-2 py-5 px-2">
                     Add a ticker:
                     <Typeahead
                         options={dataList}
@@ -93,7 +93,6 @@ export default function FavoritePage() {
                             console.log("Selected:", opt);
                         }}
                         placeholder="Type to search symbols…"
-                        maxVisible={50} // or a smaller number if you want to limit count
                     />
                     <button
                         onClick={handleAdd}
