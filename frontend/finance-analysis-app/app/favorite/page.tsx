@@ -10,6 +10,7 @@ export default function FavoritePage() {
     const [favoriteList, setFavoriteList] = useState<string[]>([]);
     const [dataList, setDataList] = useState<string[]>([]);
     const [symbol, setSymbol] = useState("");
+    const [error, setError] = useState<string>("");
 
     useEffect(() => {
         const fetchFavorite = async () => {
@@ -49,9 +50,11 @@ export default function FavoritePage() {
                     prev.filter((item) => item !== symbol)
                 );
             } else {
+                setError(`Error deleting symbol ${symbol}`);
                 console.error("Failed to delete symbol:", symbol);
             }
         } catch (e) {
+            setError(`Error deleting symbol ${symbol}`);
             console.error("Error while deleting symbol:", e);
         }
     };
@@ -67,9 +70,11 @@ export default function FavoritePage() {
             if (response.ok) {
                 setFavoriteList((prev) => [...prev, symbol]);
             } else {
+                setError(`Error adding symbol ${symbol}`);
                 console.error("Failed to add symbol:", symbol);
             }
         } catch (e) {
+            setError(`Error adding symbol ${symbol}`);
             console.error("Error while adding symbol:", e);
         }
     };
@@ -101,7 +106,7 @@ export default function FavoritePage() {
                         Add
                     </button>
                 </div>
-                {}
+                {error && <div className="text-red-600 px-2">{error}</div>}
             </div>
         </>
     );

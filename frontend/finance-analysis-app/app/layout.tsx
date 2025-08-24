@@ -20,7 +20,7 @@ export default function RootLayout({
 function Header() {
     return (
         <div className="fixed top-4 left-4 right-4">
-            <div className="rounded-full bg-gray-300 dark:bg-gray-700 h-10 px-20 py-5 mx-10 items-center flex justify-between">
+            <div className="rounded-full bg-gray-200 dark:bg-gray-700 h-10 px-20 py-5 mx-10 items-center flex justify-between">
                 <div>
                     <Link href="/">Home</Link>
                 </div>

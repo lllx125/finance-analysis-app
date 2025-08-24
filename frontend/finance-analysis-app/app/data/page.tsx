@@ -2,57 +2,40 @@
 
 import { useEffect, useState } from "react";
 import Typeahead from "../(components)/type-ahead";
+import { Ticker } from "../(components)/ticker";
+import { getTicker, getTickerList } from "../(components)/handle-api";
 import { useAPI } from "../(components)/api-context";
-
-type Data = {
-    symbol: string;
-    count: number;
-    data: {
-        Date?: string;
-        Price?: number | null;
-    }[];
-};
+import { TickerChart } from "../(components)/line-shart";
 
 export default function DataPage() {
     const API = useAPI();
-
     const [symbol, setSymbol] = useState("AAPL");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>("");
-    const [data, setdata] = useState<Data["data"]>([]);
+    const [data, setData] = useState<Ticker["data"]>([]);
     const [dataList, setDataList] = useState<string[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const r = await fetch(`${API}/storage/list`);
-                const result = await r.json();
-                setDataList(result.files || []);
+                const result = await getTickerList(API);
+                setDataList(result);
             } catch (e) {
                 console.error("Failed to fetch data:", e);
             }
         };
-
         fetchData();
     }, []);
 
     async function load() {
         console.log("Loading data for symbol:", symbol);
         setError("");
-        setdata([]);
+        setData([]);
         setLoading(true);
         try {
-            const r = await fetch(
-                `${API}/storage/data?symbol=${encodeURIComponent(symbol)}`
-            );
-            if (!r.ok) {
-                const j = await r.json().catch(() => ({}));
-                throw new Error(j?.detail || `Failed: ${r.status}`);
-            }
-            const j: Data = await r.json();
-
-            setdata(j.data || []);
-            console.log("Loaded data:", j.data);
+            const result = await getTicker(symbol, API);
+            console.log("Loaded data:", result.data);
+            setData(result.data);
         } catch (e: any) {
             setError(e?.message || "Failed to load data");
         } finally {
@@ -101,36 +84,7 @@ export default function DataPage() {
                             Showing {data.length.toLocaleString()} data for{" "}
                             <strong>{symbol}</strong>
                         </div>
-
-                        <div className="overflow-auto max-h-96 border border-gray-200 rounded">
-                            <table className="table-auto w-full text-sm">
-                                <thead className="sticky top-0 bg-gray-100">
-                                    <tr>
-                                        <th className="text-left px-3 py-2 border-b border-gray-300 text-black">
-                                            Date
-                                        </th>
-                                        <th className="text-left px-3 py-2 border-b border-gray-300 text-black">
-                                            Price
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {data.map((r, i) => (
-                                        <tr
-                                            key={i}
-                                            className="odd:bg-white even:bg-gray-50"
-                                        >
-                                            <td className="px-3 py-2 border-b border-gray-200 whitespace-nowrap text-black">
-                                                {r.Date ?? ""}
-                                            </td>
-                                            <td className="px-3 py-2 border-b border-gray-200 whitespace-nowrap text-black">
-                                                {r.Price ?? ""}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                        <TickerChart symbol={symbol} />
                     </>
                 )}
 

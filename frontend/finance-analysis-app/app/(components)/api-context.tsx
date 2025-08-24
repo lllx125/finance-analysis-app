@@ -6,8 +6,8 @@ type APIContextType = {
     api: string;
 };
 
-const API = process.env.NEXT_PUBLIC_API_BASE || "/api";
-//const API = '/api';
+//const API = process.env.NEXT_PUBLIC_API_BASE || "/api";
+const API = "/api";
 
 const APIContext = createContext<APIContextType | undefined>(undefined);
 
